@@ -10,6 +10,13 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SubsystemConstants;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Grippy;
+import frc.robot.subsystems.LowerWrist;
+import frc.robot.subsystems.UpperIntake;
+import frc.robot.subsystems.UpperWrist;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
@@ -21,6 +28,13 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
+  private final Climber m_climber = new Climber(SubsystemConstants.kClimberDeviceId);
+  private final Elevator m_elevator = new Elevator(SubsystemConstants.kElevatorDeviceId);
+  private final Grippy m_grippy = new Grippy(SubsystemConstants.kGrippyDevice1Id, SubsystemConstants.kGrippyDevice2Id);
+  private final LowerWrist m_lowerWrist = new LowerWrist(Constants.SubsystemConstants.kLowerWristDeviceId);
+  private final UpperWrist m_upperWrist = new UpperWrist(Constants.SubsystemConstants.kUpperWristDeviceId);
+  private final UpperIntake m_upperIntake = new UpperIntake(Constants.SubsystemConstants.kUpperIntakeDeviceId);  
+
 
   private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -52,7 +66,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    m_operatorController.leftBumper().onTrue(new InstantCommand)
   }
 
   /**

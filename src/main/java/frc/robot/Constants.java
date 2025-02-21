@@ -22,6 +22,17 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class SubsystemConstants{
+    public static final int kUpperWristDeviceId = 0;
+    public static final int kLowerWristDeviceId = 0;
+    public static final int kGrippyDevice1Id = 0;
+    public static final int kGrippyDevice2Id = 0;
+    public static final int kElevatorDeviceId = 0;
+    public static final int kClimberDeviceId = 0;
+    public static final int kUpperIntakeDeviceId = 0;
+  }
+
+
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
