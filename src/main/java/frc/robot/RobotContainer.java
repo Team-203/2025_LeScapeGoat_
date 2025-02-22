@@ -50,7 +50,7 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   // Autonomous Chooser
-  private SendableChooser<Command> autoChooser;
+  // private SendableChooser<Command> autoChooser;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -79,8 +79,8 @@ public class RobotContainer {
           m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis()), 
         m_climber));
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // autoChooser = AutoBuilder.buildAutoChooser();
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
 
@@ -172,6 +172,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    // return autoChooser.getSelected();
+    return null;
   }
 }

@@ -17,19 +17,19 @@ import edu.wpi.first.math.util.Units;
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
- *
+ *fue
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
   public static final class SubsystemConstants{
-    public static final int kUpperWristDeviceId = 0;
-    public static final int kLowerWristDeviceId = 0;
-    public static final int kGrippyDevice1Id = 0;
-    public static final int kGrippyDevice2Id = 0;
-    public static final int kElevatorDeviceId = 0;
+    public static final int kUpperWristDeviceId = 10;
+    public static final int kLowerWristDeviceId = 12;
+    public static final int kGrippyDevice1Id = 16;
+    public static final int kGrippyDevice2Id = 9;
+    public static final int kElevatorDeviceId = 62;
     public static final int kClimberDeviceId = 0;
-    public static final int kUpperIntakeDeviceId = 0;
+    public static final int kUpperIntakeDeviceId = 58; // was 21
   }
 
 
@@ -66,15 +66,15 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = 0;//Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 3;
-    public static final int kFrontRightDrivingCanId = 7;
-    public static final int kRearRightDrivingCanId = 5;
+    public static final int kFrontLeftDrivingCanId = 2; // good
+    public static final int kRearLeftDrivingCanId = 5;  // good
+    public static final int kFrontRightDrivingCanId = 3; // good
+    public static final int kRearRightDrivingCanId = 7; // good
 
-    public static final int kFrontLeftTurningCanId = 2;
-    public static final int kRearLeftTurningCanId = 4;
-    public static final int kFrontRightTurningCanId = 8;
-    public static final int kRearRightTurningCanId = 6;
+    public static final int kFrontLeftTurningCanId = 1; // good
+    public static final int kRearLeftTurningCanId = 6; // good
+    public static final int kFrontRightTurningCanId = 21; // good  // was 4
+    public static final int kRearRightTurningCanId = 8; // good
 
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kRearLeftDriveEncoderReversed = false;

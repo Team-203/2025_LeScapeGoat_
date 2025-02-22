@@ -22,6 +22,7 @@ public class UpperIntake extends SubsystemBase {
     m_upperIntakeMotor = new SparkMax(upperIntakeMotorDeviceId, MotorType.kBrushless);
     upperIntakeConfig.idleMode(IdleMode.kBrake);
   }
+  
   public void intake(double value){
     m_upperIntakeMotor.set(value);
   }
