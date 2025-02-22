@@ -26,7 +26,7 @@ public class Grippy extends SubsystemBase {
     gripper2Config.idleMode(IdleMode.kBrake);
   }
 
-  public void intake(double value) {
+  public void accumulate(double value) {
     m_gripper1.set(value);
     m_gripper2.set(-value);
   }
@@ -35,7 +35,7 @@ public class Grippy extends SubsystemBase {
     m_gripper1.set(0);
     m_gripper2.set(0);
   }
-  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

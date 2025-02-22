@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.swerve;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,12 +17,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.utils.TargetingUtil;
 
 public class SwerveSubsystem extends SubsystemBase {
+
+  private static TargetingUtil m_targetingUtil;
 
   private final SwerveModule m_frontLeft = new SwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -62,7 +70,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   /** Creates a new DriveSubsystem. */
-  public SwerveSubsystem() {
+  public SwerveSubsystem(TargetingUtil targetingUtil) {
+
+    m_targetingUtil = targetingUtil;
 
     new Thread(() -> {
       try {
@@ -71,28 +81,40 @@ public class SwerveSubsystem extends SubsystemBase {
       } catch (Exception e) {
       }
     }).start();
+
+    RobotConfig config = null;
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
   
       // Configure AutoBuilder last
-    // AutoBuilder.configureHolonomic(
-    //   this::getPose, // Robot pose supplier
-    //   this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-    //   this::getRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //   this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    //   Constants.ModuleConstants.pathFollowerConfig,
-    //   () -> {
-    //     // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //     // This will flip the path being followed to the red side of the field.
-    //     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-    //     var alliance = DriverStation.getAlliance();
+    AutoBuilder.configure(
+      this::getPose, // Robot pose supplier
+      this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+      this::getRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      this::driveRobotRelative,
+      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(0.0020645, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(0.16, 0.0, 0.0) // Rotation PID constants
+            ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      config,
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        var alliance = DriverStation.getAlliance();
 
-    //     if (alliance.isPresent()) {
-    //       return alliance.get() == DriverStation.Alliance.Red;
-    //     }
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
 
-    //     return false;
-    //   },
-    //   this // Reference to this subsystem to set requirements 
-    // );
+        return false;
+      },
+      this // Reference to this subsystem to set requirements 
+    );
 
   }
   
@@ -219,7 +241,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean slowmode) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean slowmode, boolean aprilTagDetection) {
 
     double xSpeedCommanded = xSpeed;
     double ySpeedCommanded = ySpeed;
@@ -234,6 +256,10 @@ public class SwerveSubsystem extends SubsystemBase {
       xSpeedDelivered *= 0.3;
       ySpeedDelivered *= 0.3;
       rotDelivered *= 0.3;
+    }
+
+    if(aprilTagDetection) {
+      rotDelivered = m_targetingUtil.calculateRotation();
     }
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(

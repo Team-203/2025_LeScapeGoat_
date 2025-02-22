@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -18,6 +23,8 @@ import frc.robot.subsystems.LowerWrist;
 import frc.robot.subsystems.UpperIntake;
 import frc.robot.subsystems.UpperWrist;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.Limelight;
+import frc.robot.utils.TargetingUtil;
 
 
 /**
@@ -28,17 +35,22 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem();
   private final Climber m_climber = new Climber(SubsystemConstants.kClimberDeviceId);
   private final Elevator m_elevator = new Elevator(SubsystemConstants.kElevatorDeviceId);
   private final Grippy m_grippy = new Grippy(SubsystemConstants.kGrippyDevice1Id, SubsystemConstants.kGrippyDevice2Id);
   private final LowerWrist m_lowerWrist = new LowerWrist(Constants.SubsystemConstants.kLowerWristDeviceId);
   private final UpperWrist m_upperWrist = new UpperWrist(Constants.SubsystemConstants.kUpperWristDeviceId);
   private final UpperIntake m_upperIntake = new UpperIntake(Constants.SubsystemConstants.kUpperIntakeDeviceId);  
+  private final Limelight m_limelight = new Limelight();
+  private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(new TargetingUtil(m_limelight));
+
 
 
   private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+
+  // Autonomous Chooser
+  private SendableChooser<Command> autoChooser;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -52,8 +64,23 @@ public class RobotContainer {
             -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
             -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
             -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-            true, m_driverController.getHID().getLeftBumperButton()),
+            true, m_driverController.getHID().getLeftBumperButton(), m_driverController.getHID().getRightBumperButton()),
         m_robotDrive));
+
+    m_elevator.setDefaultCommand(
+      new RunCommand(
+        () -> m_elevator.verticalMove(
+          m_operatorController.getLeftTriggerAxis() - m_operatorController.getRightTriggerAxis()), 
+        m_elevator));
+
+    m_climber.setDefaultCommand(
+      new RunCommand(
+        () -> m_climber.climb(
+          m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis()), 
+        m_climber));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
 
@@ -67,7 +94,76 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_operatorController.leftBumper().onTrue(new InstantCommand)
+
+    // Spin Upper Intake Out
+    m_operatorController.povUp().onTrue(  
+    new InstantCommand(
+      () -> m_upperIntake.intake(0.3), m_upperIntake
+    )).onFalse(new InstantCommand(
+      m_upperIntake::stop, m_upperIntake
+    ));
+
+    // Spin Upper Intake In
+    m_operatorController.povDown().onTrue(  
+    new InstantCommand(
+      () -> m_upperIntake.intake(-0.3), m_upperIntake
+    )).onFalse(new InstantCommand(
+      m_upperIntake::stop, m_upperIntake
+    ));
+
+
+    // Spin Lower Wrist Up
+    m_operatorController.b().onTrue(  
+    new InstantCommand(
+      () -> m_lowerWrist.actuate(-0.3), m_lowerWrist
+    )).onFalse(new InstantCommand(
+      m_lowerWrist::stop, m_lowerWrist
+    ));
+
+    // Spin Lower Wrist Down
+    m_operatorController.x().onTrue(  
+    new InstantCommand(
+      () -> m_lowerWrist.actuate(0.3), m_lowerWrist
+    )).onFalse(new InstantCommand(
+      m_lowerWrist::stop, m_lowerWrist
+    ));
+
+
+    // Spin Upper Wrist Up
+    m_operatorController.y().onTrue(  
+    new InstantCommand(
+      () -> m_upperWrist.actuate(-0.3), m_upperWrist
+    )).onFalse(new InstantCommand(
+      m_upperWrist::stop, m_upperWrist
+    ));
+
+    // Spin Upper Wrist Down
+    m_operatorController.a().onTrue(  
+    new InstantCommand(
+      () -> m_upperWrist.actuate(0.3), m_upperWrist
+    )).onFalse(new InstantCommand(
+      m_upperWrist::stop, m_upperWrist
+    ));
+
+
+    // Accumulate Grippy In
+    m_operatorController.leftBumper().onTrue(  
+    new InstantCommand(
+      () -> m_grippy.accumulate(-0.3), m_grippy
+    )).onFalse(new InstantCommand(
+      m_grippy::stop, m_grippy
+    ));
+
+    // Accumulate Grippy Out
+    m_operatorController.rightBumper().onTrue(  
+    new InstantCommand(
+      () -> m_grippy.accumulate(0.3), m_grippy
+    )).onFalse(new InstantCommand(
+      m_grippy::stop, m_grippy
+    ));
+
+
+
   }
 
   /**
@@ -76,7 +172,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 }
