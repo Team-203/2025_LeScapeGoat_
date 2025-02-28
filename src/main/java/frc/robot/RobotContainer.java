@@ -115,7 +115,7 @@ public class RobotContainer {
     // Spin Lower Wrist Up
     m_operatorController.b().onTrue(  
     new InstantCommand(
-      () -> m_lowerWrist.actuate(-0.3), m_lowerWrist
+      () -> m_lowerWrist.actuate(0.13), m_lowerWrist
     )).onFalse(new InstantCommand(
       m_lowerWrist::stop, m_lowerWrist
     ));
@@ -123,7 +123,7 @@ public class RobotContainer {
     // Spin Lower Wrist Down
     m_operatorController.x().onTrue(  
     new InstantCommand(
-      () -> m_lowerWrist.actuate(0.3), m_lowerWrist
+      () -> m_lowerWrist.actuate(-0.13), m_lowerWrist
     )).onFalse(new InstantCommand(
       m_lowerWrist::stop, m_lowerWrist
     ));
@@ -158,6 +158,14 @@ public class RobotContainer {
     m_operatorController.rightBumper().onTrue(  
     new InstantCommand(
       () -> m_grippy.accumulate(0.3), m_grippy
+    )).onFalse(new InstantCommand(
+      m_grippy::stop, m_grippy
+    ));
+
+
+    m_operatorController.povLeft().onTrue(  
+    new InstantCommand(
+      () -> m_grippy.accumulateCoral(-0.3), m_grippy
     )).onFalse(new InstantCommand(
       m_grippy::stop, m_grippy
     ));

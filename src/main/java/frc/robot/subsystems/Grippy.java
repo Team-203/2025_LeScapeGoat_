@@ -31,6 +31,11 @@ public class Grippy extends SubsystemBase {
     m_gripper2.set(-value);
   }
 
+  public void accumulateCoral(double value) {
+    m_gripper1.set(value);
+    m_gripper2.set(-value * 2);
+  }
+
   public void stop() {
     m_gripper1.set(0);
     m_gripper2.set(0);
