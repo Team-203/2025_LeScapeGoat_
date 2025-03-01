@@ -162,12 +162,19 @@ public class RobotContainer {
       m_grippy::stop, m_grippy
     ));
 
-
+    // Accumulate Coral
     m_operatorController.povLeft().onTrue(  
     new InstantCommand(
       () -> m_grippy.accumulateCoral(-0.3), m_grippy
     )).onFalse(new InstantCommand(
       m_grippy::stop, m_grippy
+    ));
+
+
+
+    //ROBOT ZEROEING BUTTON
+    m_driverController.start().onTrue(new InstantCommand(
+      () -> m_robotDrive.zeroHeading(), m_robotDrive
     ));
 
 
