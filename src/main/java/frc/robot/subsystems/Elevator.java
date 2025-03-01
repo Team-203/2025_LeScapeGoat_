@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,6 +17,7 @@ public class Elevator extends SubsystemBase {
 
   private final SparkMaxConfig elevatorConfig = new SparkMaxConfig();
   private static SparkMax m_elevatorMotor;
+  private static DigitalInput m_limitSwitch = new DigitalInput(9);
 
   /** Creates a new Elevator. */
   public Elevator(int elevatorMotorDeviceId) {
@@ -23,6 +25,9 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.idleMode(IdleMode.kBrake);
   }
   public void verticalMove(double value){
+    if (!m_limitSwitch.get() && value > 0){
+      value = 0;
+    }
     m_elevatorMotor.set(value);
   }
   public void stop(){
@@ -38,6 +43,7 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Elevator Encoder", getEncoder());
+    SmartDashboard.putBoolean("Limit", m_limitSwitch.get());
   }
 
 }
