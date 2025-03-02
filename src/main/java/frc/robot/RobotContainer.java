@@ -50,7 +50,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -66,14 +66,8 @@ public class RobotContainer {
     m_elevator.setDefaultCommand(
       new RunCommand(
         () -> m_elevator.verticalMove(
-          m_operatorController.getLeftTriggerAxis() - m_operatorController.getRightTriggerAxis()), 
-        m_elevator));
-
-    m_climber.setDefaultCommand(
-      new RunCommand(
-        () -> m_climber.climb(
           m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis()), 
-        m_climber));
+        m_elevator));
 
     // autoChooser = AutoBuilder.buildAutoChooser();
     // SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -90,6 +84,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+
+    // Spin Climber Up
+    m_driverController.y().onTrue(  
+      new InstantCommand(
+        () -> m_climber.climb(-0.3), m_climber
+      )).onFalse(new InstantCommand(
+        m_climber::stop, m_climber
+    ));
+
+    // Spin Climber Down
+    m_driverController.a().onTrue(  
+      new InstantCommand(
+        () -> m_climber.climb(0.3), m_climber
+      )).onFalse(new InstantCommand(
+        m_climber::stop, m_climber
+    ));
 
     // Spin Upper Intake Out
     m_operatorController.povUp().onTrue(  
