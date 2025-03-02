@@ -9,7 +9,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class UpperWrist extends SubsystemBase {
@@ -43,4 +45,17 @@ public class UpperWrist extends SubsystemBase {
   public void periodic() {
       SmartDashboard.putNumber("Upper Wrist Encoder", getEncoder());
   }
+
+  public Command moveToPosition(UpperIntake upperIntake, double setpoint, double kP, double kI, double kD, double tolerance) {
+    PIDController controller = new PIDController(kP, kI, kD);
+    controller.setTolerance(tolerance);
+
+    return run(() -> {
+      actuate(controller.calculate(
+          upperIntake.getAbsoluteEncoder(),
+          setpoint
+      ));
+    }).until(controller::atSetpoint).andThen(runOnce(() -> this.stop()));
+  }
+  
 }

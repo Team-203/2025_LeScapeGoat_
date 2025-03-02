@@ -36,6 +36,10 @@ public class UpperIntake extends SubsystemBase {
     m_upperIntakeMotor.getEncoder().setPosition(0);
   }
 
+  public double getAbsoluteEncoder() {
+    return m_upperIntakeMotor.getAbsoluteEncoder().getPosition();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Upper Intake Encoder", getEncoder());

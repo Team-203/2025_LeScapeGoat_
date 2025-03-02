@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -45,7 +41,6 @@ public class RobotContainer {
   private final SwerveSubsystem m_robotDrive = new SwerveSubsystem(new TargetingUtil(m_limelight));
 
 
-
   private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
@@ -55,6 +50,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
     // Configure the trigger bindings
     configureBindings();
 
@@ -172,11 +168,26 @@ public class RobotContainer {
 
 
 
-    //ROBOT ZEROEING BUTTON
+    // Zero Heading
     m_driverController.start().onTrue(new InstantCommand(
       () -> m_robotDrive.zeroHeading(), m_robotDrive
     ));
 
+
+    // Move Upper Wrist To Coral Station
+    m_operatorController.leftTrigger().and(m_operatorController.x()).whileTrue(
+      m_upperWrist.moveToPosition(m_upperIntake, 0.855, 1.0, 0.0, 0.05, 0.005)
+    );
+
+    // Move Upper Wrist To L2
+    m_operatorController.leftTrigger().and(m_operatorController.a()).whileTrue(
+      m_upperWrist.moveToPosition(m_upperIntake, 0.285, 1.0, 0.0, 0.05, 0.005)
+    );
+
+    // Move Upper Wrist To L3
+    m_operatorController.leftTrigger().and(m_operatorController.y()).whileTrue(
+      m_upperWrist.moveToPosition(m_upperIntake, 0.278, 1.0, 0.0, 0.05, 0.005)
+    );
 
 
   }
