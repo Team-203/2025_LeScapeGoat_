@@ -78,7 +78,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 1.8;
+    public static final double kMaxSpeedMetersPerSecond = 3.8;   // was 4.8
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
@@ -110,7 +110,8 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 4;
     public static final int kRearRightTurningCanId = 8;
 
-    public static final boolean kGyroReversed = false;
+    // TODO: check later
+    public static final boolean kGyroReversed = false;  // was true
   }
 
   public static final class ModuleConstants {
@@ -134,18 +135,18 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
-    public static final double kDriveDeadband = 0.1;
+    public static final double kDriveDeadband = 0.05;
     public static final double kTriggerButtonThreshold = 0.2;
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxSpeedMetersPerSecond = 3; // was 0.5
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;  // was 2
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
+    public static final double kPXController = 1; // 0.5
+    public static final double kPYController = 1; // 0.5
     public static final double kPThetaController = 1;
 
     // Constraint for the motion profiled robot angle controller
@@ -158,31 +159,4 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class SimulationRobotConstants {
-    public static final double kPixelsPerMeter = 20;
-
-    public static final double kElevatorGearing = 25; // 25:1
-    public static final double kCarriageMass =
-        4.3 + 3.15 + 0.151; // Kg, arm + elevator stage + chain
-    public static final double kElevatorDrumRadius = 0.0328 / 2.0; // m
-    public static final double kMinElevatorHeightMeters = 0.922; // m
-    public static final double kMaxElevatorHeightMeters = 1.62; // m
-
-    public static final double kArmReduction = 60; // 60:1
-    public static final double kArmLength = 0.433; // m
-    public static final double kArmMass = 4.3; // Kg
-    public static final double kMinAngleRads =
-        Units.degreesToRadians(-50.1); // -50.1 deg from horiz
-    public static final double kMaxAngleRads =
-        Units.degreesToRadians(40.9 + 180); // 40.9 deg from horiz
-
-    public static final double kIntakeReduction = 135; // 135:1
-    public static final double kIntakeLength = 0.4032262; // m
-    public static final double kIntakeMass = 5.8738; // Kg
-    public static final double kIntakeMinAngleRads = Units.degreesToRadians(80);
-    public static final double kIntakeMaxAngleRads = Units.degreesToRadians(180);
-    public static final double kIntakeShortBarLength = 0.1524;
-    public static final double kIntakeLongBarLength = 0.3048;
-    public static final double kIntakeBarAngleRads = Units.degreesToRadians(-60);
-  }
 }

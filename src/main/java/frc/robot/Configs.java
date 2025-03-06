@@ -5,6 +5,7 @@ import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -111,7 +112,7 @@ public final class Configs {
           .allowedClosedLoopError(0.5);
 
       // Configure basic settings of the intake motor
-      intakeConfig.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+      intakeConfig.inverted(false).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
     }
   }
 
