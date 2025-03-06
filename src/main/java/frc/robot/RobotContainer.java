@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -78,11 +81,15 @@ private final Limelight m_limelight = new Limelight();
                         m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(
                         m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                    true, m_driverController.getHID().getLeftTriggerAxis() > 0.2, m_driverController.getHID().getRightTriggerAxis() > 0.2),
+                    false, m_driverController.getHID().getLeftTriggerAxis() > 0.2, m_driverController.getHID().getRightTriggerAxis() > 0.2),
             m_robotDrive));
 
     // Set the ball intake to in/out when not running based on internal state
     m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.idleCommand());
+
+    //Auto Configurations
+    NamedCommands.registerCommand("MoveToL2", m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
+    NamedCommands.registerCommand("Shoot", m_coralSubSystem.reverseIntakeCommand());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -104,10 +111,14 @@ private final Limelight m_limelight = new Limelight();
 
     // - Jog L/R
     m_driverController.leftBumper().whileTrue(new RunCommand(
-        () -> m_robotDrive.drive(0, 0.3, 0, false, false, false)));
+        () -> m_robotDrive.drive(0, 0.1, 0, false, false, false)));
     m_driverController.rightBumper().whileTrue(new RunCommand(
-        () -> m_robotDrive.drive(0, -0.3, 0, false, false, false)));
+        () -> m_robotDrive.drive(0, -0.1, 0, false, false, false)));
 
+
+    m_driverController.povUp().whileTrue(m_climberSubsystem.runClimberCommand());
+
+    m_driverController.povDown().whileTrue(m_climberSubsystem.reverseClimberCommand());
     // Operator controls
 
     // - Run coral intake
@@ -141,6 +152,17 @@ private final Limelight m_limelight = new Limelight();
         .rightTrigger(OIConstants.kTriggerButtonThreshold)
         .whileTrue(m_algaeSubsystem.reverseIntakeCommand());
 
+    // - Run algae intake, set to leave out when idle
+    m_operatorController
+        .povUp()
+        .whileTrue(m_algaeSubsystem.runIntakeCoralCommand());
+
+    // // Wrist Adjust Up
+    // m_operatorController.povUp().onTrue(new InstantCommand(() -> m_coralSubSystem.setWristPower(0.1), m_coralSubSystem)).onFalse(new InstantCommand(() -> m_coralSubSystem.setWristPower(0), m_coralSubSystem));
+
+    // // Wrist Adjust Down
+    // m_operatorController.povDown().onTrue(new InstantCommand(() -> m_coralSubSystem.setWristPower(-0.1), m_coralSubSystem)).onFalse(new InstantCommand(() -> m_coralSubSystem.setWristPower(0), m_coralSubSystem));
+
 
   }
 
@@ -150,7 +172,13 @@ private final Limelight m_limelight = new Limelight();
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+
     return autoChooser.getSelected();
+
+    // return null;
+
+
+
     // // Create config for trajectory
     // TrajectoryConfig config =
     //     new TrajectoryConfig(

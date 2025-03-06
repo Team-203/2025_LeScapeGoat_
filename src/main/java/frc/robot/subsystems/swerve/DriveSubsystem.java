@@ -73,13 +73,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_targetingUtil = targetingUtil;
 
-    new Thread(() -> {
-      try {
-          Thread.sleep(1000);
-          m_gyro.reset();
-      } catch (Exception e) {
-      }
-    }).start();
+    // new Thread(() -> {
+    //   try {
+    //       Thread.sleep(1000);
+    //       m_gyro.reset();
+    //   } catch (Exception e) {
+    //   }
+    // }).start();
 
     try{
       var config = RobotConfig.fromGUISettings();

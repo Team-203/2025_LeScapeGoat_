@@ -95,6 +95,16 @@ public class AlgaeSubsystem extends SubsystemBase {
         });
   }
 
+
+  public Command runIntakeCoralCommand() {
+    return this.run(
+        () -> {
+          stowWhenIdle = false;
+          setIntakePowerCoral(AlgaeSubsystemConstants.IntakeSetpoints.kForward / 2);
+          setIntakePosition(AlgaeSubsystemConstants.ArmSetpoints.kDown);
+        });
+  }
+
   /**
    * Command to run the algae intake in reverse. This will extend the arm to its "hold" position and
    * run the motor at its "reverse" power to eject the ball.
@@ -142,6 +152,12 @@ public class AlgaeSubsystem extends SubsystemBase {
     lIntakeMotor.set(-power);
     rIntakeMotor.set(power);
   }
+
+    /** Set the intake motor power in the range of [-1, 1]. */
+    private void setIntakePowerCoral(double power) {
+      lIntakeMotor.set(-power*2);
+      rIntakeMotor.set(power);
+    }
 
   /** Set the arm motor position. This will use closed loop position control. */
   private void setIntakePosition(double position) {

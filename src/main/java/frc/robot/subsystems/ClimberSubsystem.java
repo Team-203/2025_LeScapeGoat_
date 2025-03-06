@@ -69,7 +69,7 @@ public class ClimberSubsystem extends SubsystemBase {
     return this.run(
         () -> {
           setClimberPower(ClimberSubsystemConstants.ClimberSetpoints.kForward);
-        //   setClimberPosition(ClimberSubsystemConstants.ClimberSetpoints.kDown);
+          // setClimberPosition(ClimberSubsystemConstants.ClimberSetpoints.kDown);
         });
   }
 

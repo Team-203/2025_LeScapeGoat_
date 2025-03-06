@@ -130,6 +130,11 @@ public class CoralSubsystem extends SubsystemBase {
     intakeMotor.set(power);
   }
 
+  /** Set the intake motor power in the range of [-1, 1]. */
+  public void setWristPower(double power) {
+    armMotor.set(power);
+  }
+
   /**
    * Command to set the subsystem setpoint. This will set the arm and elevator to their predefined
    * positions for the given setpoint.
