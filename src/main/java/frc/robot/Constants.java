@@ -38,6 +38,7 @@ public final class Constants {
       public static final double kLevel2 = 37;
       public static final double kLevel3 = 37;
       public static final double kLevel4 = 36;
+      public static final double kClimb = 20;
     }
 
     public static final class IntakeSetpoints {
@@ -53,7 +54,7 @@ public final class Constants {
 
     public static final class ArmSetpoints {
       public static final double kStow = 0;
-      public static final double kHold = -11.5;
+      public static final double kHold = -27.5;
       public static final double kDown = -35;
     }
 
@@ -68,7 +69,7 @@ public final class Constants {
     public static final int kClimberMotorCanID = 22;
     
     public static final class ClimberSetpoints {
-      public static final double kForward = 0.5;
+      public static final double kForward = 0.8;
       public static final double kReverse = -0.8;
 
       public static final double kHold = -0.8;

@@ -5,12 +5,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -82,6 +82,13 @@ public class ClimberSubsystem extends SubsystemBase {
         () -> {
           setClimberPower(ClimberSubsystemConstants.ClimberSetpoints.kReverse);
           setClimberPosition(ClimberSubsystemConstants.ClimberSetpoints.kHold);
+        });
+  }
+
+  public Command stopClimberCommand() {
+    return this.run(
+        () -> {
+          setClimberPower(0);
         });
   }
 
