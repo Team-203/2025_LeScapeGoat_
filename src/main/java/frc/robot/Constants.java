@@ -35,8 +35,8 @@ public final class Constants {
     public static final class ArmSetpoints {
       public static final double kFeederStation = 6;
       public static final double kLevel1 = 0;
-      public static final double kLevel2 = 34;
-      public static final double kLevel3 = 34;
+      public static final double kLevel2 = 37;
+      public static final double kLevel3 = 37;
       public static final double kLevel4 = 36;
     }
 
@@ -111,7 +111,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 8;
 
     // TODO: check later
-    public static final boolean kGyroReversed = true;  // was true
+    public static final boolean kGyroReversed = false;  // was true
   }
 
   public static final class ModuleConstants {

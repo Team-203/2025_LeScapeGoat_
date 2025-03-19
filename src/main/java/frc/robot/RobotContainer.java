@@ -81,7 +81,7 @@ private final Limelight m_limelight = new Limelight();
                         m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(
                         m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                    false, m_driverController.getHID().getLeftTriggerAxis() > 0.2, m_driverController.getHID().getRightTriggerAxis() > 0.2),
+                    true, m_driverController.getHID().getLeftTriggerAxis() > 0.2, m_driverController.getHID().getRightTriggerAxis() > 0.2),
             m_robotDrive));
 
     // Set the ball intake to in/out when not running based on internal state
@@ -104,16 +104,17 @@ private final Limelight m_limelight = new Limelight();
   private void configureButtonBindings() {
     // Operator controls
     // - Set swerve to X
-    m_driverController.leftStick().whileTrue(m_robotDrive.setXCommand());
+    // m_driverController.leftStick().whileTrue(m_robotDrive.setXCommand());
 
-    // - Zero swerve heading
-    m_driverController.start().onTrue(m_robotDrive.zeroHeadingCommand());
-
+    // Zero Heading
+    m_driverController.start().onTrue(new InstantCommand(
+        () -> m_robotDrive.zeroHeading(), m_robotDrive
+    ));
     // - Jog L/R
     m_driverController.leftBumper().whileTrue(new RunCommand(
-        () -> m_robotDrive.drive(0, 0.1, 0, false, false, false)));
+        () -> m_robotDrive.drive(0, 0.2, 0, false, false, false)));
     m_driverController.rightBumper().whileTrue(new RunCommand(
-        () -> m_robotDrive.drive(0, -0.1, 0, false, false, false)));
+        () -> m_robotDrive.drive(0, -0.2, 0, false, false, false)));
 
 
     m_driverController.povUp().whileTrue(m_climberSubsystem.runClimberCommand());
