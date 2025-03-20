@@ -214,6 +214,15 @@ public class DriveSubsystem extends SubsystemBase {
    * @return */
   public void zeroHeading() {
     m_gyro.reset();
+    m_gyro.setAngleAdjustment(0);
+  }
+
+
+  /** Zeroes the heading of the robot. 
+   * @return */
+  public void reverseHeading() {
+    m_gyro.reset();
+    m_gyro.setAngleAdjustment(180);
   }
 
   /**
@@ -228,6 +237,7 @@ public class DriveSubsystem extends SubsystemBase {
   public Rotation2d getRotation2d() {
     return Rotation2d.fromDegrees(getHeading()); 
   }
+
 
   /**
    * Method to drive the robot using joystick info.

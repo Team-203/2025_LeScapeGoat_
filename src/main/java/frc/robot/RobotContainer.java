@@ -96,6 +96,14 @@ private final Limelight m_limelight = new Limelight();
     m_driverController.start().onTrue(new InstantCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive
     ));
+
+
+    // Reverse Heading
+    m_driverController.back().onTrue(new InstantCommand(
+        () -> m_robotDrive.reverseHeading(), m_robotDrive
+    ));
+
+    
     // - Jog L/R
     m_driverController.leftBumper().whileTrue(new RunCommand(
         () -> m_robotDrive.drive(0, 0.1, 0, false, false, false)));
@@ -103,9 +111,11 @@ private final Limelight m_limelight = new Limelight();
         () -> m_robotDrive.drive(0, -0.1, 0, false, false, false)));
 
 
+    // Run Climber
     m_driverController.povUp().whileTrue(m_climberSubsystem.runClimberCommand())
         .onFalse(m_climberSubsystem.stopClimberCommand());
 
+    // Reverse Climber
     m_driverController.povDown().whileTrue(m_climberSubsystem.reverseClimberCommand())
         .onFalse(m_climberSubsystem.stopClimberCommand());
 
