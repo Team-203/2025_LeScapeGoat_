@@ -23,7 +23,6 @@ import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import frc.robot.subsystems.swerve.DriveSubsystem;
 import frc.robot.subsystems.vision.Limelight;
-import frc.robot.utils.TargetingUtil;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,9 +31,10 @@ import frc.robot.utils.TargetingUtil;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
   // The robot's subsystems
-private final Limelight m_limelight = new Limelight();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(new TargetingUtil(m_limelight));
+  private final Limelight m_limelight = new Limelight();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
   private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -67,7 +67,9 @@ private final Limelight m_limelight = new Limelight();
                         m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(
                         m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                    true, m_driverController.getHID().getLeftTriggerAxis() > 0.2, m_driverController.getHID().getRightTriggerAxis() > 0.2),
+                    true, 
+                    m_driverController.getHID().getLeftTriggerAxis() > OIConstants.kTriggerButtonThreshold, 
+                    m_driverController.getHID().getRightTriggerAxis() > OIConstants.kTriggerButtonThreshold),
             m_robotDrive));
 
     // Set the ball intake to in/out when not running based on internal state

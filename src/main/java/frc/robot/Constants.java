@@ -19,6 +19,14 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static final class AprilTagCenteringConstants {
+    public static final double kSetpoint = 0;
+    public static final double kTolerance = 0.25;
+    public static final double kP = 0.07;
+    public static final double kI = 0;
+    public static final double kD = 0.0005;
+  }
+
   public static final class CoralSubsystemConstants {
     public static final int kElevatorMotorCanId = 62;
     public static final int kArmMotorCanId = 10;

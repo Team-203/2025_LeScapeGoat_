@@ -10,6 +10,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,12 +22,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AprilTagCenteringConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.TargetingUtil;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private static TargetingUtil m_targetingUtil;
+  private static Limelight m_limelight;
+
+  private static TargetingUtil m_aprilTagTargetingUtil;
 
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -70,9 +75,13 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem(TargetingUtil targetingUtil) {
+  public DriveSubsystem(Limelight limelight) {
 
-    m_targetingUtil = targetingUtil;
+    m_limelight = limelight;
+
+    m_aprilTagTargetingUtil = new TargetingUtil(m_limelight, AprilTagCenteringConstants.kSetpoint, AprilTagCenteringConstants.kTolerance,
+        new PIDController(AprilTagCenteringConstants.kP, AprilTagCenteringConstants.kI, AprilTagCenteringConstants.kD)
+    );
 
     new Thread(() -> {
       try {
@@ -247,7 +256,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot           Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
-   * @param rateLimit     Whether to enable rate limiting for smoother control.
+   * @param slowmode     Whether to enable speed reduction.
+   * @param aprilTagDetection Whether to center to current AprilTag
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean slowmode, boolean aprilTagDetection) {
 
@@ -267,7 +277,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     if(aprilTagDetection) {
-      rotDelivered = -m_targetingUtil.calculateRotation();
+      rotDelivered = m_aprilTagTargetingUtil.calculateRotation();
     }
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
