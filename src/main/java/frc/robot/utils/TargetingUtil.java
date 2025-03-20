@@ -17,12 +17,12 @@ public class TargetingUtil {
     public TargetingUtil(Limelight limelightSubsystem, double tolerance, double p){
         this.limelightSubsystem = limelightSubsystem;
         pidController = new PIDController(p, 0, 0.0005); 
-        pidController.setSetpoint(-3.25);
+        pidController.setSetpoint(0);
         pidController.setTolerance(tolerance);
     }
 
     public TargetingUtil(Limelight limelightSubsystem) {
-        this(limelightSubsystem, .25, 0.02);
+        this(limelightSubsystem, .25, 0.07);
     }
 
     public double calculateRotation(){

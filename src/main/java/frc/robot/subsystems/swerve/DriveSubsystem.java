@@ -267,7 +267,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     if(aprilTagDetection) {
-      rotDelivered = m_targetingUtil.calculateRotation();
+      rotDelivered = -m_targetingUtil.calculateRotation();
     }
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
