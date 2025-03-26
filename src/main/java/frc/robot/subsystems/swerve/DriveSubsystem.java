@@ -230,7 +230,6 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. 
    * @return */
   public void reverseHeading() {
-    m_gyro.reset();
     m_gyro.setAngleAdjustment(180);
   }
 
@@ -277,6 +276,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     if(aprilTagDetection) {
+      fieldRelative = false;
       rotDelivered = m_aprilTagTargetingUtil.calculateRotation();
     }
 

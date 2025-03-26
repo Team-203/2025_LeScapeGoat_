@@ -77,7 +77,13 @@ public class RobotContainer {
 
     //Auto Configurations
     NamedCommands.registerCommand("MoveToL2", m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
+    NamedCommands.registerCommand("ShootL1", m_coralSubSystem.reverseIntakeL1Command());
     NamedCommands.registerCommand("Shoot", m_coralSubSystem.reverseIntakeCommand());
+    NamedCommands.registerCommand("MoveToZero", m_coralSubSystem
+        .setSetpointCommand(Setpoint.kFeederStation)
+        .alongWith(m_algaeSubsystem.stowCommand()));
+    NamedCommands.registerCommand("StopIntakeCommand", m_coralSubSystem.stopIntakeCommand());
+
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);

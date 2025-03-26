@@ -186,6 +186,24 @@ public class CoralSubsystem extends SubsystemBase {
         () -> this.setIntakePower(IntakeSetpoints.kReverse), () -> this.setIntakePower(0.0));
   }
 
+    /**
+   * Command to reverses the intake motor. When the command is interrupted, e.g. the button is
+   * released, the motor will stop.
+   */
+  public Command reverseIntakeL1Command() {
+    return this.startEnd(
+        () -> this.setIntakePower(IntakeSetpoints.kReverseL1), () -> this.setIntakePower(0.0));
+  }
+
+      /**
+   * Command to reverses the intake motor. When the command is interrupted, e.g. the button is
+   * released, the motor will stop.
+   */
+  public Command stopIntakeCommand() {
+    return this.runOnce(
+        () -> this.setIntakePower(0.0));
+  }
+
   @Override
   public void periodic() {
     moveToSetpoint();

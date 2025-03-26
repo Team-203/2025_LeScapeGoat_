@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueMiddleShootCoralL1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToL2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootL1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntakeCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToZero"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
