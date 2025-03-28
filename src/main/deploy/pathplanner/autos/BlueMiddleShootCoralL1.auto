@@ -9,6 +9,43 @@
           "data": {
             "pathName": "BlueMiddleShootCoralL1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToL2"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootL1"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntakeCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToZero"
+          }
         }
       ]
     }
